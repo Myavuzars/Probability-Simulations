@@ -1,4 +1,4 @@
-name: "Simulations"
+name: "Probability-Simulations"
 output_dir: "docs"
 navbar:
   title: "R"

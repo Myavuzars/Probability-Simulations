@@ -1,0 +1,855 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+
+
+
+<title>Probability Simulation with R</title>
+
+<script src="site_libs/header-attrs-2.5/header-attrs.js"></script>
+<script src="site_libs/jquery-1.11.3/jquery.min.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link href="site_libs/bootstrap-3.3.5/css/bootstrap.min.css" rel="stylesheet" />
+<script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
+<script src="site_libs/navigation-1.1/tabsets.js"></script>
+<link href="site_libs/highlightjs-9.12.0/default.css" rel="stylesheet" />
+<script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
+<link href="site_libs/anchor-sections-1.0/anchor-sections.css" rel="stylesheet" />
+<script src="site_libs/anchor-sections-1.0/anchor-sections.js"></script>
+
+<style type="text/css">
+  code{white-space: pre-wrap;}
+  span.smallcaps{font-variant: small-caps;}
+  span.underline{text-decoration: underline;}
+  div.column{display: inline-block; vertical-align: top; width: 50%;}
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+  ul.task-list{list-style: none;}
+    </style>
+
+<style type="text/css">code{white-space: pre;}</style>
+<style type="text/css">
+  pre:not([class]) {
+    background-color: white;
+  }
+</style>
+<script type="text/javascript">
+if (window.hljs) {
+  hljs.configure({languages: []});
+  hljs.initHighlightingOnLoad();
+  if (document.readyState && document.readyState === "complete") {
+    window.setTimeout(function() { hljs.initHighlighting(); }, 0);
+  }
+}
+</script>
+
+
+
+<style type="text/css">
+h1 {
+  font-size: 34px;
+}
+h1.title {
+  font-size: 38px;
+}
+h2 {
+  font-size: 30px;
+}
+h3 {
+  font-size: 24px;
+}
+h4 {
+  font-size: 18px;
+}
+h5 {
+  font-size: 16px;
+}
+h6 {
+  font-size: 12px;
+}
+.table th:not([align]) {
+  text-align: left;
+}
+</style>
+
+
+
+
+<style type = "text/css">
+.main-container {
+  max-width: 940px;
+  margin-left: auto;
+  margin-right: auto;
+}
+code {
+  color: inherit;
+  background-color: rgba(0, 0, 0, 0.04);
+}
+img {
+  max-width:100%;
+}
+.tabbed-pane {
+  padding-top: 12px;
+}
+.html-widget {
+  margin-bottom: 20px;
+}
+button.code-folding-btn:focus {
+  outline: none;
+}
+summary {
+  display: list-item;
+}
+</style>
+
+
+<style type="text/css">
+/* padding for bootstrap navbar */
+body {
+  padding-top: 51px;
+  padding-bottom: 40px;
+}
+/* offset scroll position for anchor links (for fixed navbar)  */
+.section h1 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h2 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h3 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h4 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h5 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h6 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.dropdown-submenu {
+  position: relative;
+}
+.dropdown-submenu>.dropdown-menu {
+  top: 0;
+  left: 100%;
+  margin-top: -6px;
+  margin-left: -1px;
+  border-radius: 0 6px 6px 6px;
+}
+.dropdown-submenu:hover>.dropdown-menu {
+  display: block;
+}
+.dropdown-submenu>a:after {
+  display: block;
+  content: " ";
+  float: right;
+  width: 0;
+  height: 0;
+  border-color: transparent;
+  border-style: solid;
+  border-width: 5px 0 5px 5px;
+  border-left-color: #cccccc;
+  margin-top: 5px;
+  margin-right: -10px;
+}
+.dropdown-submenu:hover>a:after {
+  border-left-color: #ffffff;
+}
+.dropdown-submenu.pull-left {
+  float: none;
+}
+.dropdown-submenu.pull-left>.dropdown-menu {
+  left: -100%;
+  margin-left: 10px;
+  border-radius: 6px 0 6px 6px;
+}
+</style>
+
+<script>
+// manage active state of menu based on current page
+$(document).ready(function () {
+  // active menu anchor
+  href = window.location.pathname
+  href = href.substr(href.lastIndexOf('/') + 1)
+  if (href === "")
+    href = "index.html";
+  var menuAnchor = $('a[href="' + href + '"]');
+
+  // mark it active
+  menuAnchor.parent().addClass('active');
+
+  // if it's got a parent navbar menu mark it active as well
+  menuAnchor.closest('li.dropdown').addClass('active');
+});
+</script>
+
+<!-- tabsets -->
+
+<style type="text/css">
+.tabset-dropdown > .nav-tabs {
+  display: inline-table;
+  max-height: 500px;
+  min-height: 44px;
+  overflow-y: auto;
+  background: white;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.tabset-dropdown > .nav-tabs > li.active:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li.active:before {
+  content: "&#xe258;";
+  border: none;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs > li.active {
+  display: block;
+}
+
+.tabset-dropdown > .nav-tabs > li > a,
+.tabset-dropdown > .nav-tabs > li > a:focus,
+.tabset-dropdown > .nav-tabs > li > a:hover {
+  border: none;
+  display: inline-block;
+  border-radius: 4px;
+  background-color: transparent;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li {
+  display: block;
+  float: none;
+}
+
+.tabset-dropdown > .nav-tabs > li {
+  display: none;
+}
+</style>
+
+<!-- code folding -->
+
+
+
+
+</head>
+
+<body>
+
+
+<div class="container-fluid main-container">
+
+
+
+
+<div class="navbar navbar-default  navbar-fixed-top" role="navigation">
+  <div class="container">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="index.html">R</a>
+    </div>
+    <div id="navbar" class="navbar-collapse collapse">
+      <ul class="nav navbar-nav">
+        <li>
+  <a href="Welcome.html">Welcome</a>
+</li>
+<li>
+  <a href="Rsimulation1.html">Probability Simulation with R</a>
+</li>
+<li>
+  <a href="Rsimulation2.html">Probability with Discrete Random Variable</a>
+</li>
+<li>
+  <a href="Rsimulation3.html">Expected Value of a Discrete Random Variable</a>
+</li>
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        
+      </ul>
+    </div><!--/.nav-collapse -->
+  </div><!--/.container -->
+</div><!--/.navbar -->
+
+<div class="fluid-row" id="header">
+
+
+
+<h1 class="title toc-ignore">Probability Simulation with R</h1>
+
+</div>
+
+
+<p><strong>Question 1:</strong></p>
+<p>In an office, there are 10 sales person,four women and six men. Three women and two men will be chosen at random. Use simulations in R to approximate the probability.</p>
+<pre class="r"><code>nloop=10000
+
+sample1  = c(rep(&quot;W&quot;,4),rep(&quot;M&quot;,6))
+sample1</code></pre>
+<pre><code>##  [1] &quot;W&quot; &quot;W&quot; &quot;W&quot; &quot;W&quot; &quot;M&quot; &quot;M&quot; &quot;M&quot; &quot;M&quot; &quot;M&quot; &quot;M&quot;</code></pre>
+<pre class="r"><code>count = 0
+
+for (iloop in 1:nloop){
+  MW = sample(sample1,5, replace=F)
+  if  (sum(length(which(&quot;M&quot;==MW)))==2){count =count+1}
+}
+count/nloop</code></pre>
+<pre><code>## [1] 0.2305</code></pre>
+<pre class="r"><code>#Mathematical Solution
+Com = function(n, x) {
+  factorial(n) / factorial(n-x) / factorial(x)
+}
+
+(Com(4,3) * Com(6,2))/ Com(10,5)</code></pre>
+<pre><code>## [1] 0.2380952</code></pre>
+<p><strong>Question 2:</strong></p>
+<p>There are 7 balls in a urn, they are identical except color, 3 blue and 4 yellow. What is the probability of choosing 2 balls in a different color without replacement ? Write R code to approximate the probability.</p>
+<pre class="r"><code>nloop=10000
+bag = c(rep(1,3),rep(0,4))
+#Let&#39;s assign the colors to numbers: Blue=1 and Yellow=0
+count=0
+
+for (iloop in 1:nloop){
+  tot = sample(bag,2, replace=F)
+  if (sum(tot)==1 ){count =count+1}
+}
+count/nloop</code></pre>
+<pre><code>## [1] 0.568</code></pre>
+<pre class="r"><code>#Mathematical Solution
+Com(2,1)*(3/7)*(4/6)</code></pre>
+<pre><code>## [1] 0.5714286</code></pre>
+<p><strong>Question 3:</strong></p>
+<p>There are 10 balls in each urn. 5 blue and 5 yellow ball in the 1st urn, and 4 blue, and 6 yellow in the 2nd urn. Sandy picks 1 ball from each urn at random. What is the probability of choosing the balls in the same color? Write R code to approximate the probability.</p>
+<pre class="r"><code># Let&#39;s code Blue= 1, Yellow= 0 
+nloop=10000
+sam1 = c(rep(1,5),rep(0,5))
+sam2 = c(rep(1,4),rep(0,6))
+count=0
+
+for (iloop in 1:nloop){
+  urn1 = sample(sam1,1, replace=F)
+  urn2 = sample(sam2,1, replace=F)
+  urn  = urn1 + urn2
+  
+  if (sum(urn)==2 | sum(urn==0)){count =count+1}
+  
+}
+count/nloop</code></pre>
+<pre><code>## [1] 0.5008</code></pre>
+<pre class="r"><code>#Mathematical Solution
+(5/10)*(4/10)+(5/10)*(6/10)</code></pre>
+<pre><code>## [1] 0.5</code></pre>
+<p><strong>Question 4:</strong> Suppose you roll a fair six-sided die six times. Write R code to approximate the probability that each number comes up exactly one time.</p>
+<pre class="r"><code>nloop=10000
+sam1 = rep(1:6,1)
+count=0
+
+for (iloop in 1:nloop){
+  roll = sample(sam1,6, replace=T)
+  sroll = sort(roll)
+  
+  if (all(sroll == c(1,2,3,4,5,6)) ){count =count+1}
+  
+}
+count/nloop</code></pre>
+<pre><code>## [1] 0.0143</code></pre>
+<pre class="r"><code>#Mathematical Solution
+(6/6)*(5/6)*(4/6)*(3/6)*(2/6)*(1/6)</code></pre>
+<pre><code>## [1] 0.0154321</code></pre>
+<p><strong>Question 5:</strong> What is the probability of a large straight when five dice are rolled? This is defined (in the game Yahtzee) as the numbers 1,2,3,4,5 or 2,3,4,5,6. Write R code to approximate this probability.</p>
+<pre class="r"><code>nloop=10000
+sam1 = rep(1:6,1)
+count=0
+
+for (iloop in 1:nloop){
+  roll = sample(sam1,5, replace=T)
+  sroll = sort(roll)
+  
+  if (all(sroll == c(1,2,3,4,5)) | all(sroll == c(2,3,4,5,6))){count =count+1}
+  
+}
+count/nloop</code></pre>
+<pre><code>## [1] 0.0322</code></pre>
+<pre class="r"><code>#Mathematical Solution
+2*(5/6)*(4/6)*(3/6)*(2/6)*(1/6)</code></pre>
+<pre><code>## [1] 0.0308642</code></pre>
+<p><strong>Question 6:</strong> For a recent year, 51% of the families in the United States had no children under the age of 18; 20% had one child; 19% had two children; 7% had three children; and 3% had four or more children.<br />
+If three family is selected at random, find the probability that total number of children these families have less then 7. Write R code to determine the probability. Use simulations in R to approximate probability.</p>
+<pre class="r"><code>nloop = 10000
+count = 0
+
+for (iloop in 1:nloop){
+  child = sample(0:4,3,replace = T, prob = c(.51,.2,.19,.07,.03))
+  if (sum(child)&lt;7){count=count+1}
+  
+}
+count/nloop</code></pre>
+<pre><code>## [1] 0.964</code></pre>
+<pre class="r"><code>#Mathematical Solution
+# We need to find all different possibilities and add them up. (000,001,002,...)</code></pre>
+<p><strong>Question 7:</strong> Four children from a neighborhood in Smalltown attend a holiday party. There are 40 children total at the party, and 20 prizes are to be distributed at random to the children. That is, each prize is equally likely to go to each of the 40 children, regardless of whether a child already has prizes.</p>
+<ol style="list-style-type: lower-alpha">
+<li>Write R code to determine the probability that each of the four children gets exactly one prize.</li>
+</ol>
+<pre class="r"><code>#a.
+
+nloop =10000
+count=0
+
+for(iloop in 1:nloop){
+  prize=sample(1:40,20,replace=T)
+  s_prize = sort(prize)
+  
+  if (all(s_prize[1:4] == c(1,2,3,4)) &amp; s_prize[5]!=4){count= count+1}
+}
+count/nloop</code></pre>
+<pre><code>## [1] 0.0083</code></pre>
+<pre class="r"><code>#Mathematical Solution
+(20*19*18*17*(36)^16)/40^20</code></pre>
+<pre><code>## [1] 0.008416765</code></pre>
+<ol start="2" style="list-style-type: lower-alpha">
+<li>Write R code to determine the probability that each of the four children gets at least one prize.</li>
+</ol>
+<pre class="r"><code>nloop =10000
+count=0
+
+for(iloop in 1:nloop){
+  price=sample(1:40,20,replace=T)
+  
+  if (all(c(1,2,3,4) %in% price)){count= count+1}
+}
+count/nloop</code></pre>
+<pre><code>## [1] 0.022</code></pre>
+<pre class="r"><code>#Mathematical Solution
+
+(20*19*18*17*(40)^16)/40^20</code></pre>
+<pre><code>## [1] 0.04542188</code></pre>
+<ol start="2" style="list-style-type: lower-alpha">
+<li>Write a R code to determine the probability that 50 different children gets a prize.</li>
+</ol>
+<pre class="r"><code>#c. UNIQUE and  LENGTH
+
+nloop =10000
+count=0
+
+for(iloop in 1:nloop){
+  prize=sample(1:40,20,replace=T)
+  u_prize =length(unique(prize))
+ 
+  if (u_prize== 20){count= count+1}
+}
+count/nloop</code></pre>
+<pre><code>## [1] 0.0031</code></pre>
+<pre class="r"><code>#Mathematical Solution
+
+(factorial(20)*Com(40,20))/40^20</code></pre>
+<pre><code>## [1] 0.003050146</code></pre>
+<p><strong>Question 8:</strong> Two factories supply light bulbs to the market. Bulbs from factory X work for over 6000 hours in 98% of cases, whereas bulbs from factory Y work for over 6000 hours in 93% of cases. It is known that<br />
+factory X supplies 65% of the total bulbs available in the market. Given that a light bulb works for more than 6000 hours, what is the probability that it was supplied by factory Y ? Use simulations in R to approximate probability.</p>
+<pre class="r"><code>nloop   =10000
+countx  =0
+county  =0
+countxy =0
+for (iloop in 1:nloop){
+  xy= sample(c(&quot;x&quot;,&quot;y&quot;),1, prob=c(0.65,0.35))
+  if (xy==&quot;x&quot;){ 
+    x = sample(0:1,1, prob =c(0.02,0.98))
+    if(x==&quot;1&quot;){countx =countx+1}
+  }
+  if (xy==&quot;y&quot;){
+    y = sample(0:1,1, prob =c(0.07,0.93))
+    if(y==&quot;1&quot;){county = county+1}
+  }
+  
+}
+
+county/(countx+county)</code></pre>
+<pre><code>## [1] 0.3331247</code></pre>
+<pre class="r"><code>#Mathematical Solution
+(93*35)/(98*65+93*35)</code></pre>
+<pre><code>## [1] 0.3381818</code></pre>
+<p><strong>Question 9:</strong></p>
+<p>A drawer contains 10 pairs of socks, where each pair is a different color. Sam draws four socks at random from the drawer (without replacement). Write R code to determine the probability that there is no pair among the four socks.</p>
+<pre class="r"><code>nloop =10000
+count =0
+socks = c(rep(1:10,each=2))
+
+for (iloop in 1:nloop){
+  draw_soc = sample(socks,4, replace=F)
+  sock = unique(draw_soc)
+  if(length(sock)==4){count= count+1}
+  
+}
+count/nloop</code></pre>
+<pre><code>## [1] 0.6995</code></pre>
+<pre class="r"><code>#Mathmatical Solution:
+(20/20)*(18/19)*(16/18)*(14/17)</code></pre>
+<pre><code>## [1] 0.6934985</code></pre>
+<p><strong>Question 10:</strong></p>
+<p>There are 4 girl and 5 boy in the classroom. What is the probability of having girls stand next to each other in the line? Use simulations in R to approximate probability.</p>
+<pre class="r"><code>nloop =10000
+count =0
+tot = c(1:9)
+
+for (iloop  in (1:nloop-3)){
+  samp = sample(tot,9, replace=F)
+  for (i in  1:9){
+    if(all(samp[i]   %in% c(1:4) &amp; 
+           samp[i+1] %in% c(1:4) &amp; 
+           samp[i+2] %in% c(1:4) &amp;
+           samp[i+3] %in% c(1:4))) {count =count+1}
+  }
+}
+count/nloop</code></pre>
+<pre><code>## [1] 0.0482</code></pre>
+<pre class="r"><code>#Mathematical Solution
+
+factorial(6)*factorial(4)/factorial(9)</code></pre>
+<pre><code>## [1] 0.04761905</code></pre>
+<p><strong>Question 11:</strong></p>
+<p>In a classroom, there are total 30 students and 8 of them have glasses, and half of the students who wear and not wear glasses habe brown eyes. What is the probability of choosing a student who has a broen eye or wear glasses?</p>
+<pre class="r"><code>nloop=10000
+count =0
+class = c(rep(1,19),rep(0,11))
+
+for (iloop in 1:nloop){
+  bg= sample(class,1, replace=F)
+  if(bg==1){count=count+1}
+}
+
+count/nloop</code></pre>
+<pre><code>## [1] 0.6255</code></pre>
+<pre class="r"><code>#Mathematical solution
+19/30</code></pre>
+<pre><code>## [1] 0.6333333</code></pre>
+<p><strong>Question 12:</strong></p>
+<p>The probablity of a hunter to hit the targer is 3/4. If he makes 4 shoot, what is the probability of hitting the target only on shoot 2 and shoot 4?</p>
+<pre class="r"><code>nloop =10000
+count =0
+
+for (iloop in 1:nloop){
+  hit1 = sample(0:1,1,replace= F,prob=c(.25,.75))
+  hit2 = sample(0:1,1,replace= F,prob=c(.25,.75))
+  hit3 = sample(0:1,1,replace= F,prob=c(.25,.75))
+  hit4 = sample(0:1,1,replace= F,prob=c(.25,.75))
+  if((sum(hit1+hit3)==0) &amp; (sum(hit2+hit4)==2)){count=count+1}
+}
+count/nloop</code></pre>
+<pre><code>## [1] 0.0371</code></pre>
+<pre class="r"><code>#Mathematical Solution
+(1/4)*(3/4)*(1/4)*(3/4)</code></pre>
+<pre><code>## [1] 0.03515625</code></pre>
+<p><strong>Question 13:</strong></p>
+<p>Two evenly matched baseball teams play each other for a series of seven games. Estimate the probability that Team I will win the series by winning at least four games from Team 2. Use simulations in R to approximate wining probability.</p>
+<pre class="r"><code>nloop = 10000
+count =0
+
+
+for (iloop in 1: nloop){
+  win = sample(0:1,7,replace=T)
+  if (sum(win)&gt;=4){count =count+1}
+}
+count/nloop</code></pre>
+<pre><code>## [1] 0.4981</code></pre>
+<pre class="r"><code>#Mathematical Solution
+com = function(n, x) {
+  factorial(n) / factorial(n-x) / factorial(x)
+}
+
+
+com(7,4)*(1/2)^7+com(7,5)*(1/2)^7+com(7,6)*(1/2)^7+com(7,7)*(1/2)^7</code></pre>
+<pre><code>## [1] 0.5</code></pre>
+<p><strong>Question 14:</strong></p>
+<p>Five team joins a soccer tournamnet. The wining posibilities as follows: Team A &amp; Team B =60%, Team A &amp; Team C =40%, Team A &amp; Team D =80%, Team A &amp; Team E =30%, Team B &amp; Team C =30%, Team C &amp; Team D =70%, Team C &amp; Team E =40%, Team C &amp; Team D =50%, Team C &amp; Team E =80%, Team D &amp; Team E =90%,</p>
+<p>Use simulations in R to approximate the winning posibilities for each team.</p>
+<pre class="r"><code>nloop =100
+countA =0; countB =0; countC =0; countD =0; countE =0
+for (i in 1:nloop){
+  gameAB= sample(c(1,2),1, prob=c(0.6,0.4))
+  gameAC= sample(c(1,3),1, prob=c(0.4,0.6))
+  gameAD= sample(c(1,4),1, prob=c(0.8,0.2))
+  gameAE= sample(c(1,5),1, prob=c(0.3,0.7))
+  gameBC= sample(c(2,3),1, prob=c(0.3,0.7))
+  gameBD= sample(c(2,4),1, prob=c(0.7,0.3))
+  gameBE= sample(c(2,5),1, prob=c(0.4,0.6))
+  gameCD= sample(c(3,4),1, prob=c(0.5,0.5))
+  gameCE= sample(c(3,5),1, prob=c(0.8,0.2))
+  gameDE= sample(c(4,5),1, prob=c(0.9,0.1))
+  games =c(gameAB,gameAC,gameAD,gameAE,gameBC,gameBD,gameBE,gameCD,gameCE,gameDE)
+  
+  countA = countA + length(which(1==games))
+  countB = countB + length(which(2==games))
+  countC = countC + length(which(3==games))
+  countD = countD + length(which(4==games))
+  countE = countE + length(which(5==games))
+  
+}
+
+print(paste(&quot;Team A :&quot;, countA,&quot;// Team B :&quot;,countB, &quot;// Team C :&quot;,countC,&quot;// Team D :&quot;,countD,&quot;// Team E :&quot;,countE))</code></pre>
+<pre><code>## [1] &quot;Team A : 213 // Team B : 192 // Team C : 254 // Team D : 181 // Team E : 160&quot;</code></pre>
+<p><strong>Question 15:</strong></p>
+<p>The experiment is to roll four fair, six-sided dice. Given that all dice show numbers that are three or greater, what is the probability that all the dice show either odd numbers or even numbers(3,5,7,5 or 4,6,4,6) ? Use simulations in R to compute this conditional probability.</p>
+<pre class="r"><code>nloop=10000; countA=0; countAB=0
+for(iloop in 1:nloop){
+  dice=sample(1:6,4,replace=TRUE)
+  eventA =  all(dice&gt;=3)
+  eventB =  (all(dice%%2==1) | all(dice%%2==0))
+  if(eventA){countA=countA+1}
+  if(eventA&amp;eventB){countAB=countAB+1}
+}
+countAB/countA</code></pre>
+<pre><code>## [1] 0.1333333</code></pre>
+<pre class="r"><code># Mathematical Solution
+
+# Choosing odd numbers   =2^4
+# Chosing even numbers  =2^4
+# All possibilites that are greater or equal to 3 = (4)^4 =256
+(2^4+2^4)/4^4</code></pre>
+<pre><code>## [1] 0.125</code></pre>
+<p><strong>Question 16:</strong></p>
+<p>A quiz consists of ten multiple choice questions with choices (a) and (b)for each. If an unprepared student marks answers at random, what are the probabilities of the following events:</p>
+<p>Use simulations in R to approximate probabilities.</p>
+<ol style="list-style-type: lower-alpha">
+<li>exactly one correct answer</li>
+</ol>
+<pre class="r"><code>nloop =10000
+count =0
+
+for (iloop in 1:nloop){
+  quiz = sample(0:1,10,replace = T)
+  #Let&#39;s choose 1&#39;s are correct and 0&#39;s are wrong answer
+  if (sum(quiz)==1){count= count+1}
+}
+
+count/nloop</code></pre>
+<pre><code>## [1] 0.0096</code></pre>
+<pre class="r"><code>#Mathematical Solution
+Com = function(n, x) {
+  factorial(n) / factorial(n-x) / factorial(x)
+}
+
+(Com(10,1) )/ 2^10</code></pre>
+<pre><code>## [1] 0.009765625</code></pre>
+<ol start="2" style="list-style-type: lower-alpha">
+<li>seven or more answers are correct</li>
+</ol>
+<pre class="r"><code>nloop =10000
+count =0
+
+for (iloop in 1:nloop){
+  quiz = sample(0:1,10,replace = T)
+  #Let&#39;s choose 1&#39;s are correct and 0&#39;s are wrong answer
+  if (sum(quiz)&gt;=7){count= count+1}
+}
+
+count/nloop</code></pre>
+<pre><code>## [1] 0.1733</code></pre>
+<pre class="r"><code>#Mathematical Solution
+Com = function(n, x) {
+  factorial(n) / factorial(n-x) / factorial(x)
+}
+
+
+(Com(10,7) + Com(10,8) + Com(10,9) + Com(10,10))/ 2^10</code></pre>
+<pre><code>## [1] 0.171875</code></pre>
+<p><strong>Question 17:</strong></p>
+<p>A quiz consists of five multiple choice questions with choices (a), (b) and (c)for each. If an unprepared student marks answers at random, what are the probabilities of the following events:</p>
+<p>Use simulations in R to approximate probabilities.</p>
+<ol style="list-style-type: lower-alpha">
+<li>exactly one correct answer</li>
+</ol>
+<pre class="r"><code>nloop =10000
+count =0
+
+for (iloop in 1:nloop){
+  quiz = sample(c(&quot;a&quot;,&#39;b&#39;,&quot;c&quot;),5,replace = T)
+  
+  #Let&#39;s choose a&#39;s are correct and b&#39;s and c&#39;s are wrong answer
+  if (quiz[1]==&quot;a&quot;){count= count+1}
+}
+
+count/nloop</code></pre>
+<pre><code>## [1] 0.3335</code></pre>
+<pre class="r"><code>#Mathematical Solution
+Com = function(n, x) {
+  factorial(n) / factorial(n-x) / factorial(x)
+}
+
+
+(Com(5,1)*(1/3)*(2/3)^4)</code></pre>
+<pre><code>## [1] 0.3292181</code></pre>
+<ol start="2" style="list-style-type: lower-alpha">
+<li>three or more answers are correct</li>
+</ol>
+<pre class="r"><code>nloop =10000
+count =0
+
+for (iloop in 1:nloop){
+  quiz = sample(c(&quot;a&quot;,&#39;b&#39;,&quot;c&quot;),5,replace = T)
+  
+  #Let&#39;s choose a&#39;s are correct and b&#39;s and c&#39;s are wrong answer
+  if ((sum(sapply(quiz==&quot;a&quot;,unique)))&gt;=3){count= count+1}
+ 
+}
+
+count/nloop</code></pre>
+<pre><code>## [1] 0.1984</code></pre>
+<pre class="r"><code>#Mathematical Solution
+Com = function(n, x) {
+  factorial(n) / factorial(n-x) / factorial(x)
+}
+
+
+(Com(5,3)*(1/3)^3*(2/3)^2 + Com(5,4)*(1/3)^4*(2/3) + Com(5,5)*(1/3)^5)</code></pre>
+<pre><code>## [1] 0.2098765</code></pre>
+<p><strong>Question 18:</strong></p>
+<p>Simulate Birthday paradox with R.</p>
+<p>The paradox of birthdays is a mathematical problem put forward by Von Mises, who looks for the value N in the problem: In a group of N people there is 50% chance that at least 2 people in the group share the same birthday (day + month). The answer is N = 23, which is quite counterintuitive, hence the paradox.</p>
+<pre class="r"><code># Birthday Function
+birthday &lt;- function(n){
+  f=1
+  for(i in 1:n){
+    f &lt;- f* (365-i+1)/365
+  }
+  print(paste(&quot;Probability of&quot;,i,&quot;people  :&quot;,1-f))
+}
+
+# Birthday Paradox Simulation
+nloop=50
+birthstat=1:nloop
+for (i in 1:nloop){
+  birthstat[i]=birthday(i)
+}</code></pre>
+<pre><code>## [1] &quot;Probability of 1 people  : 0&quot;
+## [1] &quot;Probability of 2 people  : 0.00273972602739725&quot;
+## [1] &quot;Probability of 3 people  : 0.00820416588478146&quot;
+## [1] &quot;Probability of 4 people  : 0.0163559124665503&quot;
+## [1] &quot;Probability of 5 people  : 0.0271355736997937&quot;
+## [1] &quot;Probability of 6 people  : 0.0404624836491116&quot;
+## [1] &quot;Probability of 7 people  : 0.0562357030959756&quot;
+## [1] &quot;Probability of 8 people  : 0.0743352923516692&quot;
+## [1] &quot;Probability of 9 people  : 0.094623833889167&quot;
+## [1] &quot;Probability of 10 people  : 0.116948177711078&quot;
+## [1] &quot;Probability of 11 people  : 0.141141378321733&quot;
+## [1] &quot;Probability of 12 people  : 0.167024788838065&quot;
+## [1] &quot;Probability of 13 people  : 0.19441027523243&quot;
+## [1] &quot;Probability of 14 people  : 0.223102512004973&quot;
+## [1] &quot;Probability of 15 people  : 0.252901319763687&quot;
+## [1] &quot;Probability of 16 people  : 0.28360400525285&quot;
+## [1] &quot;Probability of 17 people  : 0.315007665296561&quot;
+## [1] &quot;Probability of 18 people  : 0.346911417871789&quot;
+## [1] &quot;Probability of 19 people  : 0.379118526031537&quot;
+## [1] &quot;Probability of 20 people  : 0.41143838358058&quot;
+## [1] &quot;Probability of 21 people  : 0.443688335165206&quot;
+## [1] &quot;Probability of 22 people  : 0.47569530766255&quot;
+## [1] &quot;Probability of 23 people  : 0.507297234323986&quot;
+## [1] &quot;Probability of 24 people  : 0.538344257914529&quot;
+## [1] &quot;Probability of 25 people  : 0.568699703969464&quot;
+## [1] &quot;Probability of 26 people  : 0.598240820135939&quot;
+## [1] &quot;Probability of 27 people  : 0.626859282263242&quot;
+## [1] &quot;Probability of 28 people  : 0.654461472342399&quot;
+## [1] &quot;Probability of 29 people  : 0.680968537477777&quot;
+## [1] &quot;Probability of 30 people  : 0.706316242719269&quot;
+## [1] &quot;Probability of 31 people  : 0.730454633728644&quot;
+## [1] &quot;Probability of 32 people  : 0.753347527850321&quot;
+## [1] &quot;Probability of 33 people  : 0.774971854175772&quot;
+## [1] &quot;Probability of 34 people  : 0.795316864620154&quot;
+## [1] &quot;Probability of 35 people  : 0.814383238874715&quot;
+## [1] &quot;Probability of 36 people  : 0.83218210637988&quot;
+## [1] &quot;Probability of 37 people  : 0.848734008216385&quot;
+## [1] &quot;Probability of 38 people  : 0.864067821082121&quot;
+## [1] &quot;Probability of 39 people  : 0.878219664366722&quot;
+## [1] &quot;Probability of 40 people  : 0.891231809817949&quot;
+## [1] &quot;Probability of 41 people  : 0.903151611481735&quot;
+## [1] &quot;Probability of 42 people  : 0.914030471561869&quot;
+## [1] &quot;Probability of 43 people  : 0.92392285565612&quot;
+## [1] &quot;Probability of 44 people  : 0.932885368551426&quot;
+## [1] &quot;Probability of 45 people  : 0.940975899465775&quot;
+## [1] &quot;Probability of 46 people  : 0.948252843367255&quot;
+## [1] &quot;Probability of 47 people  : 0.954774402833299&quot;
+## [1] &quot;Probability of 48 people  : 0.960597972879422&quot;
+## [1] &quot;Probability of 49 people  : 0.965779609322676&quot;
+## [1] &quot;Probability of 50 people  : 0.970373579577988&quot;</code></pre>
+<pre class="r"><code># x=1:50
+# plot(x,birthstat, main= &quot;Birthday Paradox&quot;, xlab = &quot;Number of people&quot;, ylab=&quot;Probability&quot;)
+# abline(h=0.5, xlim =c(0,50),col=&quot;red&quot;)</code></pre>
+
+
+
+
+</div>
+
+<script>
+
+// add bootstrap table styles to pandoc tables
+function bootstrapStylePandocTables() {
+  $('tr.odd').parent('tbody').parent('table').addClass('table table-condensed');
+}
+$(document).ready(function () {
+  bootstrapStylePandocTables();
+});
+
+
+</script>
+
+<!-- tabsets -->
+
+<script>
+$(document).ready(function () {
+  window.buildTabsets("TOC");
+});
+
+$(document).ready(function () {
+  $('.tabset-dropdown > .nav-tabs > li').click(function () {
+    $(this).parent().toggleClass('nav-tabs-open')
+  });
+});
+</script>
+
+<!-- code folding -->
+
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>

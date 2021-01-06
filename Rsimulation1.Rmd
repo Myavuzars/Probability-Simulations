@@ -1,0 +1,632 @@
+---
+title: "Probability Simulation with R"
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+
+**Question 1:**
+
+In an office, there are 10 sales person,four women and six men. Three women and two men will be chosen at random. Use simulations in R to approximate the probability.
+
+```{r 1,, echo=TRUE}
+nloop=10000
+
+sample1  = c(rep("W",4),rep("M",6))
+sample1
+count = 0
+
+for (iloop in 1:nloop){
+  MW = sample(sample1,5, replace=F)
+  if  (sum(length(which("M"==MW)))==2){count =count+1}
+}
+count/nloop
+
+#Mathematical Solution
+Com = function(n, x) {
+  factorial(n) / factorial(n-x) / factorial(x)
+}
+
+(Com(4,3) * Com(6,2))/ Com(10,5)
+
+```
+
+**Question 2:**
+
+There are 7 balls in a urn, they are identical except color, 3 blue and 4 yellow. What is the probability of choosing 2 balls in a different color without replacement ? Write R code to approximate the probability. 
+
+
+```{r 2, echo=TRUE}
+
+nloop=10000
+bag = c(rep(1,3),rep(0,4))
+#Let's assign the colors to numbers: Blue=1 and Yellow=0
+count=0
+
+for (iloop in 1:nloop){
+  tot = sample(bag,2, replace=F)
+  if (sum(tot)==1 ){count =count+1}
+}
+count/nloop
+
+#Mathematical Solution
+Com(2,1)*(3/7)*(4/6)
+
+```
+
+**Question 3:**
+
+There are 10 balls in each urn.  5 blue and 5 yellow ball in the 1st urn, and 4 blue, and 6 yellow in the
+2nd urn. Sandy picks 1 ball from each urn at random. What is the probability of choosing the balls in the same color?
+Write R code to approximate the probability.
+
+```{r 3,, echo=TRUE}
+
+# Let's code Blue= 1, Yellow= 0 
+nloop=10000
+sam1 = c(rep(1,5),rep(0,5))
+sam2 = c(rep(1,4),rep(0,6))
+count=0
+
+for (iloop in 1:nloop){
+  urn1 = sample(sam1,1, replace=F)
+  urn2 = sample(sam2,1, replace=F)
+  urn  = urn1 + urn2
+  
+  if (sum(urn)==2 | sum(urn==0)){count =count+1}
+  
+}
+count/nloop
+
+#Mathematical Solution
+(5/10)*(4/10)+(5/10)*(6/10)
+
+```
+
+**Question 4:**
+Suppose you roll a fair six-sided die six times. Write R code to approximate the
+   probability that each number comes up exactly one time.
+
+```{r 4, echo=TRUE}
+
+nloop=10000
+sam1 = rep(1:6,1)
+count=0
+
+for (iloop in 1:nloop){
+  roll = sample(sam1,6, replace=T)
+  sroll = sort(roll)
+  
+  if (all(sroll == c(1,2,3,4,5,6)) ){count =count+1}
+  
+}
+count/nloop
+
+#Mathematical Solution
+(6/6)*(5/6)*(4/6)*(3/6)*(2/6)*(1/6)
+
+```
+
+**Question 5:**
+What is the probability of a large straight when five dice are rolled? This is defined (in the game     Yahtzee) as the numbers 1,2,3,4,5 or 2,3,4,5,6. Write R code to approximate this probability.
+
+
+```{r 5,, echo=TRUE}
+
+nloop=10000
+sam1 = rep(1:6,1)
+count=0
+
+for (iloop in 1:nloop){
+  roll = sample(sam1,5, replace=T)
+  sroll = sort(roll)
+  
+  if (all(sroll == c(1,2,3,4,5)) | all(sroll == c(2,3,4,5,6))){count =count+1}
+  
+}
+count/nloop
+
+#Mathematical Solution
+2*(5/6)*(4/6)*(3/6)*(2/6)*(1/6)
+
+```
+
+
+**Question 6:**
+ For a recent year, 51% of the families in the United States had no children under the age of 18; 
+ 20% had one child; 19% had two children; 7% had three children; and 3% had four or more children.  
+ If three family is selected at random, find the probability that total number of children these families
+ have less then 7. Write R code to determine the probability.
+ Use simulations in R to approximate probability.
+
+
+```{r 6, echo=TRUE}
+
+nloop = 10000
+count = 0
+
+for (iloop in 1:nloop){
+  child = sample(0:4,3,replace = T, prob = c(.51,.2,.19,.07,.03))
+  if (sum(child)<7){count=count+1}
+  
+}
+count/nloop
+
+#Mathematical Solution
+# We need to find all different possibilities and add them up. (000,001,002,...)
+
+```
+
+
+**Question 7:**
+   Four children from a neighborhood in Smalltown attend a holiday party. There are
+   40 children total at the party, and 20 prizes are to be distributed at random to
+   the children. That is, each prize is equally likely to go to each of the 40 children,
+   regardless of whether a child already has prizes.
+   
+  (a) Write R code to determine the probability that each of the four children gets
+      exactly one prize.
+   
+ 
+```{r 7a,, echo=TRUE}
+
+#a.
+
+nloop =10000
+count=0
+
+for(iloop in 1:nloop){
+  prize=sample(1:40,20,replace=T)
+  s_prize = sort(prize)
+  
+  if (all(s_prize[1:4] == c(1,2,3,4)) & s_prize[5]!=4){count= count+1}
+}
+count/nloop
+
+#Mathematical Solution
+(20*19*18*17*(36)^16)/40^20
+
+```
+
+
+      
+  (b) Write R code to determine the probability that each of the four children gets at
+      least one prize.
+      
+```{r 7b, echo=TRUE}
+
+nloop =10000
+count=0
+
+for(iloop in 1:nloop){
+  price=sample(1:40,20,replace=T)
+  
+  if (all(c(1,2,3,4) %in% price)){count= count+1}
+}
+count/nloop
+
+#Mathematical Solution
+
+(20*19*18*17*(40)^16)/40^20
+```
+
+ (b) Write a R code to determine the probability that 50 different children gets a prize.
+ 
+```{r 7b,, echo=TRUE}
+
+#c. UNIQUE and  LENGTH
+
+nloop =10000
+count=0
+
+for(iloop in 1:nloop){
+  prize=sample(1:40,20,replace=T)
+  u_prize =length(unique(prize))
+ 
+  if (u_prize== 20){count= count+1}
+}
+count/nloop
+
+#Mathematical Solution
+
+(factorial(20)*Com(40,20))/40^20
+
+```
+
+
+**Question 8:**
+ Two factories supply light bulbs to the market. Bulbs from factory X work  for over 6000 hours in 
+ 98% of cases, whereas bulbs from factory Y work for over 6000 hours  in 93% of cases. It is known that   
+ factory X supplies 65% of the total bulbs available in the  market.
+ Given that a light bulb works for more than 6000 hours, what is the probability that it
+ was supplied by factory Y ?
+ Use simulations in R to approximate probability.
+
+```{r 8, echo=TRUE}
+
+
+nloop   =10000
+countx  =0
+county  =0
+countxy =0
+for (iloop in 1:nloop){
+  xy= sample(c("x","y"),1, prob=c(0.65,0.35))
+  if (xy=="x"){ 
+    x = sample(0:1,1, prob =c(0.02,0.98))
+    if(x=="1"){countx =countx+1}
+  }
+  if (xy=="y"){
+    y = sample(0:1,1, prob =c(0.07,0.93))
+    if(y=="1"){county = county+1}
+  }
+  
+}
+
+county/(countx+county)
+
+#Mathematical Solution
+(93*35)/(98*65+93*35)
+
+```
+
+**Question 9:**
+     
+   A drawer contains 10 pairs of socks, where each pair is a different color. Sam draws
+   four socks at random from the drawer (without replacement). Write R code to
+   determine the probability that there is no pair among the four socks.
+
+
+```{r 9,, echo=TRUE}
+
+nloop =10000
+count =0
+socks = c(rep(1:10,each=2))
+
+for (iloop in 1:nloop){
+  draw_soc = sample(socks,4, replace=F)
+  sock = unique(draw_soc)
+  if(length(sock)==4){count= count+1}
+  
+}
+count/nloop
+
+#Mathmatical Solution:
+(20/20)*(18/19)*(16/18)*(14/17)
+
+```
+
+**Question 10:**
+
+  There are 4 girl and 5 boy in the classroom. What is the probability of having girls stand next to
+  each other  in the line? Use simulations in R to approximate probability.
+
+```{r 10, echo=TRUE}
+
+nloop =10000
+count =0
+tot = c(1:9)
+
+for (iloop  in (1:nloop-3)){
+  samp = sample(tot,9, replace=F)
+  for (i in  1:9){
+    if(all(samp[i]   %in% c(1:4) & 
+           samp[i+1] %in% c(1:4) & 
+           samp[i+2] %in% c(1:4) &
+           samp[i+3] %in% c(1:4))) {count =count+1}
+  }
+}
+count/nloop
+
+#Mathematical Solution
+
+factorial(6)*factorial(4)/factorial(9)
+
+```
+
+**Question 11:**
+
+  In a classroom, there are total 30 students and 8 of them have glasses, and half of the students 
+  who wear and not wear glasses habe brown eyes.
+  What is the probability of choosing a student who has a broen eye or wear glasses?
+
+
+```{r 11,, echo=TRUE}
+
+nloop=10000
+count =0
+class = c(rep(1,19),rep(0,11))
+
+for (iloop in 1:nloop){
+  bg= sample(class,1, replace=F)
+  if(bg==1){count=count+1}
+}
+
+count/nloop
+
+#Mathematical solution
+19/30
+
+```
+
+**Question 12:**
+
+  The probablity of a hunter to hit the targer is 3/4. If he makes 4 shoot, 
+  what is the probability of hitting the target only on shoot 2 and shoot 4?
+
+```{r 12, echo=TRUE}
+
+nloop =10000
+count =0
+
+for (iloop in 1:nloop){
+  hit1 = sample(0:1,1,replace= F,prob=c(.25,.75))
+  hit2 = sample(0:1,1,replace= F,prob=c(.25,.75))
+  hit3 = sample(0:1,1,replace= F,prob=c(.25,.75))
+  hit4 = sample(0:1,1,replace= F,prob=c(.25,.75))
+  if((sum(hit1+hit3)==0) & (sum(hit2+hit4)==2)){count=count+1}
+}
+count/nloop
+
+#Mathematical Solution
+(1/4)*(3/4)*(1/4)*(3/4)
+
+```
+
+**Question 13:**
+
+  Two evenly matched baseball teams play each other for a series of seven games. Estimate the probability   that Team I will win the series by winning at least four games from Team 2. 
+  Use simulations in R to approximate wining probability.
+
+
+```{r 13,, echo=TRUE}
+
+nloop = 10000
+count =0
+
+
+for (iloop in 1: nloop){
+  win = sample(0:1,7,replace=T)
+  if (sum(win)>=4){count =count+1}
+}
+count/nloop
+
+#Mathematical Solution
+com = function(n, x) {
+  factorial(n) / factorial(n-x) / factorial(x)
+}
+
+
+com(7,4)*(1/2)^7+com(7,5)*(1/2)^7+com(7,6)*(1/2)^7+com(7,7)*(1/2)^7
+
+
+
+
+```
+
+**Question 14:**
+
+   Five team joins a soccer tournamnet. The wining posibilities as follows: 
+   Team A & Team B =60%,  Team A & Team C =40%, Team A & Team D =80%,   Team A & Team E =30%,
+   Team B & Team C =30%,  Team C & Team D =70%, Team C & Team E =40%,
+   Team C & Team D =50%,  Team C & Team E =80%, 
+   Team D & Team E =90%,
+   
+   Use simulations in R to approximate the winning posibilities for each team.
+
+```{r 14, echo=TRUE}
+nloop =100
+countA =0; countB =0; countC =0; countD =0; countE =0
+for (i in 1:nloop){
+  gameAB= sample(c(1,2),1, prob=c(0.6,0.4))
+  gameAC= sample(c(1,3),1, prob=c(0.4,0.6))
+  gameAD= sample(c(1,4),1, prob=c(0.8,0.2))
+  gameAE= sample(c(1,5),1, prob=c(0.3,0.7))
+  gameBC= sample(c(2,3),1, prob=c(0.3,0.7))
+  gameBD= sample(c(2,4),1, prob=c(0.7,0.3))
+  gameBE= sample(c(2,5),1, prob=c(0.4,0.6))
+  gameCD= sample(c(3,4),1, prob=c(0.5,0.5))
+  gameCE= sample(c(3,5),1, prob=c(0.8,0.2))
+  gameDE= sample(c(4,5),1, prob=c(0.9,0.1))
+  games =c(gameAB,gameAC,gameAD,gameAE,gameBC,gameBD,gameBE,gameCD,gameCE,gameDE)
+  
+  countA = countA + length(which(1==games))
+  countB = countB + length(which(2==games))
+  countC = countC + length(which(3==games))
+  countD = countD + length(which(4==games))
+  countE = countE + length(which(5==games))
+  
+}
+
+print(paste("Team A :", countA,"// Team B :",countB, "// Team C :",countC,"// Team D :",countD,"// Team E :",countE))
+
+
+```
+
+
+
+**Question 15:**
+
+The experiment is to roll four fair, six-sided dice. Given that all dice show numbers
+that are three or greater, what is the probability that all the dice show either odd numbers or even numbers(3,5,7,5 or 4,6,4,6) ? Use simulations in R to compute this conditional probability.
+
+
+```{r 15,, echo=TRUE}
+
+nloop=10000; countA=0; countAB=0
+for(iloop in 1:nloop){
+  dice=sample(1:6,4,replace=TRUE)
+  eventA =  all(dice>=3)
+  eventB =  (all(dice%%2==1) | all(dice%%2==0))
+  if(eventA){countA=countA+1}
+  if(eventA&eventB){countAB=countAB+1}
+}
+countAB/countA
+
+# Mathematical Solution
+
+# Choosing odd numbers   =2^4
+# Chosing even numbers  =2^4
+# All possibilites that are greater or equal to 3 = (4)^4 =256
+(2^4+2^4)/4^4
+
+
+```
+
+
+
+**Question 16:**
+
+A quiz consists of ten multiple choice questions with choices (a) and (b)for
+each. If an unprepared student marks answers at random, what are the probabilities
+of the following events:
+
+Use simulations in R to approximate probabilities.
+
+(a) exactly one correct answer
+
+
+```{r 16a, echo=TRUE}
+
+nloop =10000
+count =0
+
+for (iloop in 1:nloop){
+  quiz = sample(0:1,10,replace = T)
+  #Let's choose 1's are correct and 0's are wrong answer
+  if (sum(quiz)==1){count= count+1}
+}
+
+count/nloop
+
+#Mathematical Solution
+Com = function(n, x) {
+  factorial(n) / factorial(n-x) / factorial(x)
+}
+
+(Com(10,1) )/ 2^10
+```
+
+(b) seven or more answers are correct
+
+```{r 16b, echo=TRUE}
+
+nloop =10000
+count =0
+
+for (iloop in 1:nloop){
+  quiz = sample(0:1,10,replace = T)
+  #Let's choose 1's are correct and 0's are wrong answer
+  if (sum(quiz)>=7){count= count+1}
+}
+
+count/nloop
+
+#Mathematical Solution
+Com = function(n, x) {
+  factorial(n) / factorial(n-x) / factorial(x)
+}
+
+
+(Com(10,7) + Com(10,8) + Com(10,9) + Com(10,10))/ 2^10
+```
+
+
+**Question 17:**
+
+A quiz consists of five multiple choice questions with choices (a), (b) and (c)for
+each. If an unprepared student marks answers at random, what are the probabilities
+of the following events:
+
+   Use simulations in R to approximate probabilities.
+
+  (a) exactly one correct answer
+ 
+
+```{r 17a, echo=TRUE}
+
+nloop =10000
+count =0
+
+for (iloop in 1:nloop){
+  quiz = sample(c("a",'b',"c"),5,replace = T)
+  
+  #Let's choose a's are correct and b's and c's are wrong answer
+  if (quiz[1]=="a"){count= count+1}
+}
+
+count/nloop
+
+#Mathematical Solution
+Com = function(n, x) {
+  factorial(n) / factorial(n-x) / factorial(x)
+}
+
+
+(Com(5,1)*(1/3)*(2/3)^4)
+
+
+```
+
+ (b) three or more answers are correct
+
+```{r 17b, echo=TRUE}
+
+nloop =10000
+count =0
+
+for (iloop in 1:nloop){
+  quiz = sample(c("a",'b',"c"),5,replace = T)
+  
+  #Let's choose a's are correct and b's and c's are wrong answer
+  if ((sum(sapply(quiz=="a",unique)))>=3){count= count+1}
+ 
+}
+
+count/nloop
+
+#Mathematical Solution
+Com = function(n, x) {
+  factorial(n) / factorial(n-x) / factorial(x)
+}
+
+
+(Com(5,3)*(1/3)^3*(2/3)^2 + Com(5,4)*(1/3)^4*(2/3) + Com(5,5)*(1/3)^5)
+
+
+```
+
+**Question 18:**
+
+Simulate Birthday paradox with R.
+
+The paradox of birthdays is a mathematical problem put forward by Von Mises, who looks for the value N in the problem: In a group of N people there is 50% chance that at least 2 people in the group share the same birthday (day + month). The answer is N = 23, which is quite counterintuitive, hence the paradox.
+
+```{r 20, echo=TRUE}
+
+# Birthday Function
+birthday <- function(n){
+  f=1
+  for(i in 1:n){
+    f <- f* (365-i+1)/365
+  }
+  print(paste("Probability of",i,"people  :",1-f))
+}
+
+# Birthday Paradox Simulation
+nloop=50
+birthstat=1:nloop
+for (i in 1:nloop){
+  birthstat[i]=birthday(i)
+}
+
+
+# x=1:50
+# plot(x,birthstat, main= "Birthday Paradox", xlab = "Number of people", ylab="Probability")
+# abline(h=0.5, xlim =c(0,50),col="red")
+
+
+```
+
+

@@ -1,0 +1,591 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+
+
+
+<title>Probability with Discrete Random Variables</title>
+
+<script src="site_libs/header-attrs-2.5/header-attrs.js"></script>
+<script src="site_libs/jquery-1.11.3/jquery.min.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link href="site_libs/bootstrap-3.3.5/css/bootstrap.min.css" rel="stylesheet" />
+<script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
+<script src="site_libs/navigation-1.1/tabsets.js"></script>
+<link href="site_libs/highlightjs-9.12.0/default.css" rel="stylesheet" />
+<script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
+<link href="site_libs/anchor-sections-1.0/anchor-sections.css" rel="stylesheet" />
+<script src="site_libs/anchor-sections-1.0/anchor-sections.js"></script>
+
+<style type="text/css">
+  code{white-space: pre-wrap;}
+  span.smallcaps{font-variant: small-caps;}
+  span.underline{text-decoration: underline;}
+  div.column{display: inline-block; vertical-align: top; width: 50%;}
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+  ul.task-list{list-style: none;}
+    </style>
+
+<style type="text/css">code{white-space: pre;}</style>
+<style type="text/css">
+  pre:not([class]) {
+    background-color: white;
+  }
+</style>
+<script type="text/javascript">
+if (window.hljs) {
+  hljs.configure({languages: []});
+  hljs.initHighlightingOnLoad();
+  if (document.readyState && document.readyState === "complete") {
+    window.setTimeout(function() { hljs.initHighlighting(); }, 0);
+  }
+}
+</script>
+
+
+
+<style type="text/css">
+h1 {
+  font-size: 34px;
+}
+h1.title {
+  font-size: 38px;
+}
+h2 {
+  font-size: 30px;
+}
+h3 {
+  font-size: 24px;
+}
+h4 {
+  font-size: 18px;
+}
+h5 {
+  font-size: 16px;
+}
+h6 {
+  font-size: 12px;
+}
+.table th:not([align]) {
+  text-align: left;
+}
+</style>
+
+
+
+
+<style type = "text/css">
+.main-container {
+  max-width: 940px;
+  margin-left: auto;
+  margin-right: auto;
+}
+code {
+  color: inherit;
+  background-color: rgba(0, 0, 0, 0.04);
+}
+img {
+  max-width:100%;
+}
+.tabbed-pane {
+  padding-top: 12px;
+}
+.html-widget {
+  margin-bottom: 20px;
+}
+button.code-folding-btn:focus {
+  outline: none;
+}
+summary {
+  display: list-item;
+}
+</style>
+
+
+<style type="text/css">
+/* padding for bootstrap navbar */
+body {
+  padding-top: 51px;
+  padding-bottom: 40px;
+}
+/* offset scroll position for anchor links (for fixed navbar)  */
+.section h1 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h2 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h3 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h4 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h5 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h6 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.dropdown-submenu {
+  position: relative;
+}
+.dropdown-submenu>.dropdown-menu {
+  top: 0;
+  left: 100%;
+  margin-top: -6px;
+  margin-left: -1px;
+  border-radius: 0 6px 6px 6px;
+}
+.dropdown-submenu:hover>.dropdown-menu {
+  display: block;
+}
+.dropdown-submenu>a:after {
+  display: block;
+  content: " ";
+  float: right;
+  width: 0;
+  height: 0;
+  border-color: transparent;
+  border-style: solid;
+  border-width: 5px 0 5px 5px;
+  border-left-color: #cccccc;
+  margin-top: 5px;
+  margin-right: -10px;
+}
+.dropdown-submenu:hover>a:after {
+  border-left-color: #ffffff;
+}
+.dropdown-submenu.pull-left {
+  float: none;
+}
+.dropdown-submenu.pull-left>.dropdown-menu {
+  left: -100%;
+  margin-left: 10px;
+  border-radius: 6px 0 6px 6px;
+}
+</style>
+
+<script>
+// manage active state of menu based on current page
+$(document).ready(function () {
+  // active menu anchor
+  href = window.location.pathname
+  href = href.substr(href.lastIndexOf('/') + 1)
+  if (href === "")
+    href = "index.html";
+  var menuAnchor = $('a[href="' + href + '"]');
+
+  // mark it active
+  menuAnchor.parent().addClass('active');
+
+  // if it's got a parent navbar menu mark it active as well
+  menuAnchor.closest('li.dropdown').addClass('active');
+});
+</script>
+
+<!-- tabsets -->
+
+<style type="text/css">
+.tabset-dropdown > .nav-tabs {
+  display: inline-table;
+  max-height: 500px;
+  min-height: 44px;
+  overflow-y: auto;
+  background: white;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.tabset-dropdown > .nav-tabs > li.active:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li.active:before {
+  content: "&#xe258;";
+  border: none;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs > li.active {
+  display: block;
+}
+
+.tabset-dropdown > .nav-tabs > li > a,
+.tabset-dropdown > .nav-tabs > li > a:focus,
+.tabset-dropdown > .nav-tabs > li > a:hover {
+  border: none;
+  display: inline-block;
+  border-radius: 4px;
+  background-color: transparent;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li {
+  display: block;
+  float: none;
+}
+
+.tabset-dropdown > .nav-tabs > li {
+  display: none;
+}
+</style>
+
+<!-- code folding -->
+
+
+
+
+</head>
+
+<body>
+
+
+<div class="container-fluid main-container">
+
+
+
+
+<div class="navbar navbar-default  navbar-fixed-top" role="navigation">
+  <div class="container">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="index.html">R</a>
+    </div>
+    <div id="navbar" class="navbar-collapse collapse">
+      <ul class="nav navbar-nav">
+        <li>
+  <a href="Welcome.html">Welcome</a>
+</li>
+<li>
+  <a href="Rsimulation1.html">Probability Simulation with R</a>
+</li>
+<li>
+  <a href="Rsimulation2.html">Probability with Discrete Random Variable</a>
+</li>
+<li>
+  <a href="Rsimulation3.html">Expected Value of a Discrete Random Variable</a>
+</li>
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        
+      </ul>
+    </div><!--/.nav-collapse -->
+  </div><!--/.container -->
+</div><!--/.navbar -->
+
+<div class="fluid-row" id="header">
+
+
+
+<h1 class="title toc-ignore">Probability with Discrete Random Variables</h1>
+
+</div>
+
+
+<div id="bernoulli-and-binomial-distributions" class="section level3">
+<h3><strong>Bernoulli and Binomial Distributions</strong></h3>
+<p>The sample space of Bernoulli experiment has only two possible outcomes: Failure or Success. pbinom(y=r,n,p) returns the probability P(Y&lt;=r) where Y ~ Binom(n,p), where r= trial, n= size and p= probability</p>
+<p><strong>Question 1.</strong></p>
+<p>Fourty percent of workers in Newtown support tax reform. Take a random sample of twelve supporters (with replacement, to ensure independence); what is the probability that exactly ten of the twelve support the proposal?</p>
+<pre class="r"><code># in order to get the exactly 10 we need to subtract P(9,12)
+pbinom(10,12,0.4)-pbinom(9,12,0.4)</code></pre>
+<pre><code>## [1] 0.002491417</code></pre>
+<p><strong>Defining a Combination Function for Mathematical Solutions</strong></p>
+<pre class="r"><code>Com = function(n, x) {
+  factorial(n) / factorial(n-x) / factorial(x)
+}</code></pre>
+<pre class="r"><code>#Mathematical Solution
+
+Com(12,10)*(4/10)^10*(6/10)^2</code></pre>
+<pre><code>## [1] 0.002491417</code></pre>
+<p><strong>Question 2.</strong></p>
+<p>A coin is tossed three times, Find the all possibilities?</p>
+<pre class="r"><code>#pbinom(y,n,p) returns the probability Y&lt;=y  therefore:
+# The possibility of 0 heads (3 Tails)is:
+pbinom(0,3,0.5)</code></pre>
+<pre><code>## [1] 0.125</code></pre>
+<pre class="r"><code># The possibility of 1 head (2 Tails)is:
+pbinom(1,3,0.5)- pbinom(0,3,0.5)</code></pre>
+<pre><code>## [1] 0.375</code></pre>
+<pre class="r"><code># The possibility of 2 heads (1 Tail)is:
+pbinom(2,3,0.5)- pbinom(1,3,0.5)</code></pre>
+<pre><code>## [1] 0.375</code></pre>
+<pre class="r"><code># The possibility of 3 heads (0 Tails)is:
+pbinom(3,3,0.5)- pbinom(2,3,0.5)</code></pre>
+<pre><code>## [1] 0.125</code></pre>
+<pre class="r"><code>#Mathematical Solution
+
+# The possibility of 0 heads (3 Tails)is:
+Com(3,3)*(1/2)^3*(1/2)^0</code></pre>
+<pre><code>## [1] 0.125</code></pre>
+<pre class="r"><code># The possibility of 1 head (2 Tails)is:
+Com(3,2)*(1/2)^2*(1/2)^1</code></pre>
+<pre><code>## [1] 0.375</code></pre>
+<pre class="r"><code># The possibility of 2 heads (1 Tail)is:
+Com(3,1)*(1/2)^1*(1/2)^2</code></pre>
+<pre><code>## [1] 0.375</code></pre>
+<pre class="r"><code># The possibility of 3 heads (0 Tails)is:
+Com(3,0)*(1/2)^0*(1/2)^3</code></pre>
+<pre><code>## [1] 0.125</code></pre>
+<p><strong>Question 3.</strong></p>
+<p>A test consists of 10 multiple choice questions with five choices for each question. As an experiment, you GUESS on each and every answer without even reading the questions. What is the probability of getting exactly 6 questions correct on this test?</p>
+<pre class="r"><code>#n=10; r=6, p =0.2
+pbinom(6,10,0.2)- pbinom(5,10,0.2)</code></pre>
+<pre><code>## [1] 0.005505024</code></pre>
+<pre class="r"><code>#Mathematical Solution
+Com(10,6)*(1/5)^6*(4/5)^4</code></pre>
+<pre><code>## [1] 0.005505024</code></pre>
+<p><strong>Question 4.</strong> At a certain intersection, the light for eastbound traffic is red for 15 seconds, yellow for 5 seconds, and green for 30 seconds. Find the probability that out of the next eight eastbound cars that arrive randomly at the light, exactly three will be stopped by a red light.</p>
+<pre class="r"><code># n=8, r=3, prob =15/50
+pbinom(3,8,0.3)- pbinom(2,8,0.3)</code></pre>
+<pre><code>## [1] 0.2541218</code></pre>
+<pre class="r"><code>#Mathematical Solution
+Com(8,3)*(15/50)^3*(35/50)^5</code></pre>
+<pre><code>## [1] 0.2541218</code></pre>
+<p><strong>Question 5.</strong></p>
+<p>A pizza parlor is running a promotion. Everyone who comes to the restaurant gets to spin a wheel that gives them a 10% chance of getting a free pizza. If you go with five friends, and each of you spins the wheel, what is the chance of winning at least one pizza for your group?</p>
+<pre class="r"><code># the possibility of getting at least 1 pizza is to find zero chance and subtract from 1.
+
+1-pbinom(0,6,0.1)</code></pre>
+<pre><code>## [1] 0.468559</code></pre>
+<pre class="r"><code>#Mathematical Solution
+1 - Com(6,0)*(9/10)^6</code></pre>
+<pre><code>## [1] 0.468559</code></pre>
+</div>
+<div id="geometric-distribution" class="section level3">
+<h3><strong>Geometric Distribution</strong></h3>
+<p>It is the same as the binomial except we dont have a fix number of trials, we keep going trying until we get a success (or failure depends on the situation).</p>
+<p>pgeom(k,p) returns P(Y&lt;=k), when Y ~ Geom(p), where k is number of failures</p>
+<p><strong>Question 6.</strong> Suppose that you play a game that involves rolling a fair die. You will play the game until you roll a six, what is the probability that you win the game at the 4th roll?</p>
+<pre class="r"><code># Rolling a dice and get a succes at 4th roll means there are 3 failures
+# pgeom(k,p) where k is the number of failures until success and p is the success probability (or vice versa)
+
+pgeom(3,1/6)-pgeom(2,1/6)</code></pre>
+<pre><code>## [1] 0.09645062</code></pre>
+<pre class="r"><code>#Mathematical Solution
+#P(Y=k) = p*(1-p)^k
+#P(Y=4) = 
+1/6*(5/6)^3</code></pre>
+<pre><code>## [1] 0.09645062</code></pre>
+<p><strong>Question 7.</strong> A quiz consists of ten multiple choice questions with choices (a) and (b) for each. If an unprepared student marks answers at random, what is the probability of the getting first seven answers are wrong?</p>
+<pre class="r"><code># So the 8th answer is correct: Total 8 trial and 7 failures(k=7), 1 success.
+pgeom(7,1/2)-pgeom(6,1/2)</code></pre>
+<pre><code>## [1] 0.00390625</code></pre>
+<pre class="r"><code>#Mathematical Solution
+1/2*(1/2)^7</code></pre>
+<pre><code>## [1] 0.00390625</code></pre>
+<p><strong>Question 8.</strong> Team A has a 40% chance of beating Team B in a single game. What is the probability that team A loses all the games until the seventh game of the series?</p>
+<pre class="r"><code># So the 8th answer is correct: Total 7 trial and 6 failures(k=6), 1 success.
+pgeom(6,4/10) - pgeom(5,4/10)</code></pre>
+<pre><code>## [1] 0.0186624</code></pre>
+<pre class="r"><code>#Mathematical Solution
+4/10*(6/10)^6</code></pre>
+<pre><code>## [1] 0.0186624</code></pre>
+<p><strong>Question 9.</strong> Suppose 10% of the U.S. population reside in the state of California. What is the probability of randomly selecting more than 5 people before selecting a person who resides in CA?</p>
+<pre class="r"><code>#We can find the all probability of selecting 6 people (number of failures: k=5) and subtract from 1.
+
+1-pgeom(5,1/10)</code></pre>
+<pre><code>## [1] 0.531441</code></pre>
+<pre class="r"><code>#MAthematical Solution
+
+1 -(1/10+(9/10)*(1/10)+(9/10)^2*1/10+(9/10)^3*1/10+(9/10)^4*1/10+(9/10)^5*1/10)</code></pre>
+<pre><code>## [1] 0.531441</code></pre>
+<p><strong>Question 10.</strong></p>
+<p>You play a game of chance that you can either win or lose (there are no other possibilities) until you lose. Your probability of losing is 0.57. What is the probability that it takes five games until you lose?</p>
+<pre class="r"><code># The goal is play the game until you lose so(the number of success: k=4 and p=0.57)
+pgeom(4,0.57)-pgeom(3,0.57)</code></pre>
+<pre><code>## [1] 0.01948717</code></pre>
+<pre class="r"><code>#MAthematical Solution
+
+0.57*(0.43)^4</code></pre>
+<pre><code>## [1] 0.01948717</code></pre>
+</div>
+<div id="hyper-geometric-distribution" class="section level3">
+<h3><strong>Hyper Geometric Distribution</strong></h3>
+<p>The hypergeometric distribution is a probability distribution that is very similar to the binomial distribution without replacement.</p>
+<p>phyper(m,M,N,n) function returns P(Y&lt;=k) where Y ~ HG(M,N,n)</p>
+<p>m the number of the balls drawn from the M urn (returns 0 to m) M the number of white balls in the urn. N the number of black balls in the urn. n the total number of balls drawn from the urns</p>
+<p><strong>Question 12.</strong></p>
+<p>A group of 6 female managers and 7 male managers apply for an assignment. A random sample of 5 people is drawn at random without replacement. What is the probability of choosing 2 female and 3 male?</p>
+<pre class="r"><code>phyper(2,6,7,5)-phyper(1,6,7,5)</code></pre>
+<pre><code>## [1] 0.4079254</code></pre>
+<pre class="r"><code>#Mathematical Solution
+
+Com(6,2)*Com(7,3)/Com(13,5)</code></pre>
+<pre><code>## [1] 0.4079254</code></pre>
+<p><strong>Question 13.</strong> There are 7 balls in a urn, they are identical except color, 3 blue and 4 yellow. You drawn three balls from the urn and set it aside. What is the probability of having 2 balls in the same color ?</p>
+<pre class="r"><code>phyper(2,3,4,3)-phyper(1,3,4,3) + phyper(2,4,3,3)-phyper(1,4,3,3)</code></pre>
+<pre><code>## [1] 0.8571429</code></pre>
+<pre class="r"><code>#Mathematical Solution
+
+(Com(3,2)*Com(4,1)/Com(7,3)) + (Com(4,2)*Com(3,1)/Com(7,3))</code></pre>
+<pre><code>## [1] 0.8571429</code></pre>
+<p><strong>Question 14.</strong> In a class of 24 seniors, 8 students got accepted from MIT, 5 students got accepted from Brown, and 11 students got accepted from Ohio State. If a group of 10 seniors is chosen at random (a) What is the probability that exactly two of the group got accepted from Brown? (b) What is the probability that none of the group got accepted from Brown?</p>
+<pre class="r"><code>phyper(2,5,19,10) - phyper(1,5,19,10)</code></pre>
+<pre><code>## [1] 0.3853755</code></pre>
+<pre class="r"><code>#Mathematical Solution
+
+(Com(5,2)*Com(19,8)/Com(24,10)) </code></pre>
+<pre><code>## [1] 0.3853755</code></pre>
+<ol start="2" style="list-style-type: lower-alpha">
+<li>What is the probability that none of the group got accepted from Brown?</li>
+</ol>
+<pre class="r"><code>phyper(10,19,5,10) - phyper(9,19,5,10)</code></pre>
+<pre><code>## [1] 0.04710145</code></pre>
+<pre class="r"><code>#Mathematical Solution
+
+(Com(5,0)*Com(19,10)/Com(24,10)) </code></pre>
+<pre><code>## [1] 0.04710145</code></pre>
+<p><strong>Question 15.</strong> In a certain community there are two ethnic groups: A and B. Suppose there is a school with 24 kids from group A, and 15 from group B. Five children are to be chosen to represent the school at a community event. If the kids are chosen at random what is the proportion of times that there are three from A and two from B?</p>
+<pre class="r"><code> (phyper(3,24,15,5) - phyper(2,24,15,5)) </code></pre>
+<pre><code>## [1] 0.3691141</code></pre>
+<pre class="r"><code>#Mathematical Solution
+
+(Com(24,3)*Com(15,2)/Com(39,5))</code></pre>
+<pre><code>## [1] 0.3691141</code></pre>
+</div>
+<div id="poisson-distribution" class="section level3">
+<h3><strong>Poisson Distribution</strong></h3>
+<p>The Poisson distribution is useful for modeling counts. Counts of natural events suc as number of hurricanes or earthquakes in a given timespan are often modeled with Poisson distribution.</p>
+<p><span class="math inline">\(P(Y=k) = \frac{e^{k} * \lambda^{k}}{k!}\)</span></p>
+<p>Pois(k,lambda) will return P(Y&lt;=k) when Y~ Pois(lambda)</p>
+<p><strong>Question 16.</strong> The classical example of the Poisson distribution is the number of Prussian soldiers accidentally killed by horse-kick, due to being the first example of the Poisson distribution’s application to a real-world large data set.</p>
+<p>Ten army corps were observed over 20 years, for a total of 200 observations, and 122 soldiers were killed by horse-kick over that time period.</p>
+<p>What is the probability of observing one death in a given year?</p>
+<pre class="r"><code>#k=1, lambda (average)=122/200 = 0.61
+ppois(1,0.61)-ppois(0,0.61)</code></pre>
+<pre><code>## [1] 0.331444</code></pre>
+<pre class="r"><code>#Mathematical Solution
+#P(Y=1) ; lambda =0.61
+(exp(-0.61)*0.61^1)/factorial(1)</code></pre>
+<pre><code>## [1] 0.331444</code></pre>
+<p><strong>Question 17.</strong> Births in a hospital occur randomly at an average rate of 1.8 births per hour. a. What is the probability of observing 4 births in a given hour at the hospital?</p>
+<pre class="r"><code>#k=4, lambda=1.8
+ppois(4,1.8)-ppois(3,1.8)</code></pre>
+<pre><code>## [1] 0.07230173</code></pre>
+<pre class="r"><code>#Mathematical Solution
+#P(Y=4) ; lambda =1.8
+(exp(-1.8)*1.8^4)/factorial(4)</code></pre>
+<pre><code>## [1] 0.07230173</code></pre>
+<ol start="2" style="list-style-type: lower-alpha">
+<li>What about the probability of observing more than or equal to 2 births in a given hour at the hospital?</li>
+</ol>
+<pre class="r"><code>#k&gt;1, lambda=1.8
+1-ppois(1,1.8)</code></pre>
+<pre><code>## [1] 0.5371631</code></pre>
+<pre class="r"><code>#Mathematical Solution
+# 1- P(Y=1)-P(Y=0) and lambda= 1.8
+1-(exp(-1.8)*1.8^1)/factorial(1)-(exp(-1.8)*1.8^0)/factorial(0)</code></pre>
+<pre><code>## [1] 0.5371631</code></pre>
+<p><strong>Question 18.</strong></p>
+<p>Suppose there are on average 54 volcanoes that erupt each year somewhere on Earth. On about how many days per year only two volcanoes may erupt?</p>
+<pre class="r"><code>#k=0, lambda=54/365= 0.14
+
+365* (ppois(2,0.14)-ppois(1,0.14))</code></pre>
+<pre><code>## [1] 3.109694</code></pre>
+<pre class="r"><code>#Mathematical Solution
+# P(Y=0) and lambda= 54
+
+365*((exp(-0.14)*0.14^2)/factorial(2))</code></pre>
+<pre><code>## [1] 3.109694</code></pre>
+<p><strong>Question 19.</strong></p>
+<p>The number of daily on-the-job accidents at a factory, follows a Poisson distribution with mean .26. If we randomly select two days from last year, what is the probability that on three days there were no accidents? (Assume independence.)</p>
+<pre class="r"><code>#k=3, lambda= 0.26
+
+(ppois(3,0.26)-ppois(2,0.26))</code></pre>
+<pre><code>## [1] 0.002258667</code></pre>
+<pre class="r"><code>#Mathematical Solution
+# P(Y=0) and lambda= 54
+
+((exp(-0.26)*0.26^3)/factorial(3))</code></pre>
+<pre><code>## [1] 0.002258667</code></pre>
+<p><strong>Question 20.</strong> Suppose disease A occurs with incidence 1.4 per million and disease B occurs with incidence 2.3 per million. Statistics are compiled, in which these diseases are not distinguished, but simply are all called cases of disease AB. What is the probability that a city of 1 million people has at least 4 cases of AB?</p>
+<pre class="r"><code>#k&gt;3, lambda= 3.7
+
+(1-ppois(3,3.7))</code></pre>
+<pre><code>## [1] 0.5058468</code></pre>
+<pre class="r"><code>#Mathematical Solution
+# 1-P(Y=0)-P(Y=1)-P(Y=2)-P(Y=3) and lambda= 3.7
+
+1-(exp(-3.7)*3.7^0)/factorial(0)- (exp(-3.7)*3.7^1)/factorial(1)-
+  (exp(-3.7)*3.7^2)/factorial(2)- (exp(-3.7)*3.7^3)/factorial(3)</code></pre>
+<pre><code>## [1] 0.5058468</code></pre>
+</div>
+
+
+
+
+</div>
+
+<script>
+
+// add bootstrap table styles to pandoc tables
+function bootstrapStylePandocTables() {
+  $('tr.odd').parent('tbody').parent('table').addClass('table table-condensed');
+}
+$(document).ready(function () {
+  bootstrapStylePandocTables();
+});
+
+
+</script>
+
+<!-- tabsets -->
+
+<script>
+$(document).ready(function () {
+  window.buildTabsets("TOC");
+});
+
+$(document).ready(function () {
+  $('.tabset-dropdown > .nav-tabs > li').click(function () {
+    $(this).parent().toggleClass('nav-tabs-open')
+  });
+});
+</script>
+
+<!-- code folding -->
+
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>

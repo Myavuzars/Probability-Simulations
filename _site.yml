@@ -1,0 +1,16 @@
+name: "Simulations"
+output_dir: "docs"
+navbar:
+  title: "R"
+  left:
+  - text: "Welcome"
+    href: Welcome.html
+  - text: "Probability Simulation with R"
+    href: Rsimulation1.html
+  - text: "Probability with Discrete Random Variable"
+    href: Rsimulation2.html
+  - text: "Expected Value of a Discrete Random Variable"
+    href: Rsimulation3.html
+output:
+  html_document:
+theme: cosmo

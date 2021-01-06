@@ -1,0 +1,574 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+
+
+
+<title>Expected Value of a Discrete Random Variable</title>
+
+<script src="site_libs/header-attrs-2.5/header-attrs.js"></script>
+<script src="site_libs/jquery-1.11.3/jquery.min.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link href="site_libs/bootstrap-3.3.5/css/bootstrap.min.css" rel="stylesheet" />
+<script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
+<script src="site_libs/navigation-1.1/tabsets.js"></script>
+<link href="site_libs/highlightjs-9.12.0/default.css" rel="stylesheet" />
+<script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
+<link href="site_libs/anchor-sections-1.0/anchor-sections.css" rel="stylesheet" />
+<script src="site_libs/anchor-sections-1.0/anchor-sections.js"></script>
+
+<style type="text/css">
+  code{white-space: pre-wrap;}
+  span.smallcaps{font-variant: small-caps;}
+  span.underline{text-decoration: underline;}
+  div.column{display: inline-block; vertical-align: top; width: 50%;}
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+  ul.task-list{list-style: none;}
+    </style>
+
+<style type="text/css">code{white-space: pre;}</style>
+<style type="text/css">
+  pre:not([class]) {
+    background-color: white;
+  }
+</style>
+<script type="text/javascript">
+if (window.hljs) {
+  hljs.configure({languages: []});
+  hljs.initHighlightingOnLoad();
+  if (document.readyState && document.readyState === "complete") {
+    window.setTimeout(function() { hljs.initHighlighting(); }, 0);
+  }
+}
+</script>
+
+
+
+<style type="text/css">
+h1 {
+  font-size: 34px;
+}
+h1.title {
+  font-size: 38px;
+}
+h2 {
+  font-size: 30px;
+}
+h3 {
+  font-size: 24px;
+}
+h4 {
+  font-size: 18px;
+}
+h5 {
+  font-size: 16px;
+}
+h6 {
+  font-size: 12px;
+}
+.table th:not([align]) {
+  text-align: left;
+}
+</style>
+
+
+
+
+<style type = "text/css">
+.main-container {
+  max-width: 940px;
+  margin-left: auto;
+  margin-right: auto;
+}
+code {
+  color: inherit;
+  background-color: rgba(0, 0, 0, 0.04);
+}
+img {
+  max-width:100%;
+}
+.tabbed-pane {
+  padding-top: 12px;
+}
+.html-widget {
+  margin-bottom: 20px;
+}
+button.code-folding-btn:focus {
+  outline: none;
+}
+summary {
+  display: list-item;
+}
+</style>
+
+
+<style type="text/css">
+/* padding for bootstrap navbar */
+body {
+  padding-top: 51px;
+  padding-bottom: 40px;
+}
+/* offset scroll position for anchor links (for fixed navbar)  */
+.section h1 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h2 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h3 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h4 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h5 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h6 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.dropdown-submenu {
+  position: relative;
+}
+.dropdown-submenu>.dropdown-menu {
+  top: 0;
+  left: 100%;
+  margin-top: -6px;
+  margin-left: -1px;
+  border-radius: 0 6px 6px 6px;
+}
+.dropdown-submenu:hover>.dropdown-menu {
+  display: block;
+}
+.dropdown-submenu>a:after {
+  display: block;
+  content: " ";
+  float: right;
+  width: 0;
+  height: 0;
+  border-color: transparent;
+  border-style: solid;
+  border-width: 5px 0 5px 5px;
+  border-left-color: #cccccc;
+  margin-top: 5px;
+  margin-right: -10px;
+}
+.dropdown-submenu:hover>a:after {
+  border-left-color: #ffffff;
+}
+.dropdown-submenu.pull-left {
+  float: none;
+}
+.dropdown-submenu.pull-left>.dropdown-menu {
+  left: -100%;
+  margin-left: 10px;
+  border-radius: 6px 0 6px 6px;
+}
+</style>
+
+<script>
+// manage active state of menu based on current page
+$(document).ready(function () {
+  // active menu anchor
+  href = window.location.pathname
+  href = href.substr(href.lastIndexOf('/') + 1)
+  if (href === "")
+    href = "index.html";
+  var menuAnchor = $('a[href="' + href + '"]');
+
+  // mark it active
+  menuAnchor.parent().addClass('active');
+
+  // if it's got a parent navbar menu mark it active as well
+  menuAnchor.closest('li.dropdown').addClass('active');
+});
+</script>
+
+<!-- tabsets -->
+
+<style type="text/css">
+.tabset-dropdown > .nav-tabs {
+  display: inline-table;
+  max-height: 500px;
+  min-height: 44px;
+  overflow-y: auto;
+  background: white;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.tabset-dropdown > .nav-tabs > li.active:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li.active:before {
+  content: "&#xe258;";
+  border: none;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs > li.active {
+  display: block;
+}
+
+.tabset-dropdown > .nav-tabs > li > a,
+.tabset-dropdown > .nav-tabs > li > a:focus,
+.tabset-dropdown > .nav-tabs > li > a:hover {
+  border: none;
+  display: inline-block;
+  border-radius: 4px;
+  background-color: transparent;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li {
+  display: block;
+  float: none;
+}
+
+.tabset-dropdown > .nav-tabs > li {
+  display: none;
+}
+</style>
+
+<!-- code folding -->
+
+
+
+
+</head>
+
+<body>
+
+
+<div class="container-fluid main-container">
+
+
+
+
+<div class="navbar navbar-default  navbar-fixed-top" role="navigation">
+  <div class="container">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="index.html">R</a>
+    </div>
+    <div id="navbar" class="navbar-collapse collapse">
+      <ul class="nav navbar-nav">
+        <li>
+  <a href="Welcome.html">Welcome</a>
+</li>
+<li>
+  <a href="Rsimulation1.html">Probability Simulation with R</a>
+</li>
+<li>
+  <a href="Rsimulation2.html">Probability with Discrete Random Variable</a>
+</li>
+<li>
+  <a href="Rsimulation3.html">Expected Value of a Discrete Random Variable</a>
+</li>
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        
+      </ul>
+    </div><!--/.nav-collapse -->
+  </div><!--/.container -->
+</div><!--/.navbar -->
+
+<div class="fluid-row" id="header">
+
+
+
+<h1 class="title toc-ignore">Expected Value of a Discrete Random Variable</h1>
+
+</div>
+
+
+<div id="expected-value-for-discrete-random-variables" class="section level3">
+<h3><strong>Expected Value for Discrete Random Variables</strong></h3>
+<p>If the discrete random variable X can take values x1,x2,x3,…, then the expected value is defined as</p>
+<p>E(x) = <span class="math display">\[\sum_{i=1} x_{i} * P(X=x_{i})\]</span> where xi is the outcome and P(X=xi) is the probability.</p>
+<p>The expected value or mean of a random variable is the center of its distribution.</p>
+<pre class="r"><code>Com = function(n, x) {
+  factorial(n) / factorial(n-x) / factorial(x)
+}</code></pre>
+<p><strong>Question 1.</strong></p>
+<p>A quiz consists of three multiple choice questions with choices (a) and (b) for each. An unprepared student marks answers at random. Let Y be the random variable representing the number of correct answers on the quiz. What is E(Y)?</p>
+<pre class="r"><code>nloop=10000
+count1=0
+for (iloop in 1:nloop){
+  mc=c()
+  for(i in 1:3){
+    mchoice= sample(0:1,1,replace=T)
+    if(mchoice==1){
+      count1=count1+1
+     }
+  }
+   mc=c(mc,count1)
+}
+mean(mc)/nloop</code></pre>
+<pre><code>## [1] 1.496</code></pre>
+<p>Since there are three questions, these are the possibilities: P(Y=0), P(Y=1), P(Y=2), P(Y=3)</p>
+<p>E(Y)= y0 * P(Y=0) + y1 * P(Y=1)+ y2 * P(Y=2) + y3 * P(Y=3)</p>
+<pre class="r"><code>(E= 0 *Com(3,0)*(1/2)^3 + 1 * Com(3,1)*(1/2)^1*(1/2)^2 + 2 * Com(3,2)*(1/2)^2*(1/2)^1 + 3 * Com(3,3)*(1/2)^3)</code></pre>
+<pre><code>## [1] 1.5</code></pre>
+<pre><code>## [1] &quot;The expected correct answer for 3 multiple questions with 2 choices is 1.5&quot;</code></pre>
+<p><strong>Question 2.</strong></p>
+<p>In an American roulette, there are 18 red slots, 18 black slots, and 2 green slots. If you bet 100 dollars on red, you will win 100 dollars if the marble drops in a red slot at random; otherwise you will lose $100. Calculate your expected winnings.</p>
+<pre class="r"><code>nloop=100000
+money=0
+for (iloop in i:nloop){
+  roulette = sample(0:1,1,replace=T, prob=c(20/38,18/38))
+  if(roulette==0){
+    money=money-100
+  }
+  else{
+    money=money+100
+  }
+}
+money/nloop</code></pre>
+<pre><code>## [1] -4.698</code></pre>
+<p>Since there are two possibilities: P(Y=0), P(Y=1)</p>
+<p>E(Y)= ybg * P(Y=BG) + yr* P(Y=R)</p>
+<pre class="r"><code>(E= -100 * (20/38) + 100 * (18/38) )</code></pre>
+<pre><code>## [1] -5.263158</code></pre>
+<pre><code>## [1] &quot;The expected wining is -5.26 dollars&quot;</code></pre>
+<p><strong>Question 3.</strong></p>
+<p>Bag A has three blue balls and five yellow balls. Bag B has four blue balls and two yellow balls. A game consists of two stages. First, you toss a fair coin; if heads you get bag A, if tails you get bag B. You (randomly) choose a ball from the bag. You win 100 dollars for each blue ball you draw and lose 80 dollars for a yellow ball. What is the expected amount of money that you win?</p>
+<pre class="r"><code>nloop =100000
+moneytot= c()
+coin = c(&quot;H&quot;,&quot;T&quot;)
+bag1= c(c(rep(&quot;B&quot;,3),rep(&quot;Y&quot;,5)))
+bag2= c(c(rep(&quot;B&quot;,4),rep(&quot;Y&quot;,2)))
+for (iloop in 1:nloop){
+  money=0
+  sam = sample(coin ,1)
+  sam1 = sample(bag1,1)
+  sam2 = sample(bag2,1)
+  if( (sam==&quot;H&quot; &amp; sam1==&quot;B&quot;) | (sam==&quot;T&quot; &amp; sam2==&quot;B&quot;)){
+    money = money+100
+  }
+  else{
+    money = money-80
+  }
+  moneytot= c(moneytot,money)
+  }
+mean(moneytot)</code></pre>
+<pre><code>## [1] 13.4254</code></pre>
+<p>Since there are two possibilities:</p>
+<p>E(Y)= yL * P(Y=L) + yW * P(Y=W) where yL =-80 and yW= 100</p>
+<pre class="r"><code>(Ex_Win= -80 * (1/2)*((5/8)+(2/6)) + 100 * (1/2)*((3/8)+(4/6)))</code></pre>
+<pre><code>## [1] 13.75</code></pre>
+<pre><code>## [1] &quot;The expected wining is 13.75 dollars&quot;</code></pre>
+<p><strong>Question 4.</strong> A multiple choice exam is given. A problem has four possible answers, and exactly one answer is correct. The student is allowed to choose a subset of the four possible answers as his answer. If his chosen subset contains the correct answer, the student receives three points, but he loses one point for each wrong answer in his chosen subset. Find the expected score using simulation.</p>
+<p><strong>Question 5.</strong></p>
+<p>You have 100 dollars and play the following game. An urn contains two white balls and three black balls. You draw the balls out one at a time without replacement until all the balls are gone. On each draw, you bet half of your present fortune that you will draw a white ball. What is your expected final fortune? Use simulations in R.</p>
+<pre class="r"><code>m =100
+count= c(&quot;W&quot;,&quot;W&quot;,&quot;B&quot;,&quot;B&quot;, &quot;B&quot;)
+for (iloop in 1:length(count)){
+  len= length(count)
+  sam= sample(count,1, replace = T)
+  if(sam==&quot;B&quot;){(m=m-m/2) ; (count=count[-len]) }
+  else        {(m=m+m/2) ; (count=count[-1]) }
+  print(count)
+  
+}</code></pre>
+<pre><code>## [1] &quot;W&quot; &quot;B&quot; &quot;B&quot; &quot;B&quot;
+## [1] &quot;B&quot; &quot;B&quot; &quot;B&quot;
+## [1] &quot;B&quot; &quot;B&quot;
+## [1] &quot;B&quot;
+## character(0)</code></pre>
+<pre class="r"><code>print(m)</code></pre>
+<pre><code>## [1] 28.125</code></pre>
+<p><strong>Question 6.</strong></p>
+<p>You will roll a fair, two six-sided dice until a six appears. If the sum is greater than 12, he pays you 10 dollars. Otherwise, you pay him 10 dollars. Using simulations in R, determine your expected profit from the game.</p>
+<pre class="r"><code>profit &lt;-c()
+nloop=10000
+
+for (iloop in 1:nloop){
+  money= 0
+  sam=0
+  while(!(6 %in% sam)){
+    sam = sample(1:6,2,replace=T)
+    if (sum(sam)&gt;12){
+      money =money+10
+    }
+    else{
+      money= money-10
+    }
+    profit &lt;- c(profit,money)
+  }
+}
+mean(profit)</code></pre>
+<pre><code>## [1] -32.58842</code></pre>
+<pre><code>## [1] &quot;If you play, by average, you will lose -32.59 dollars&quot;</code></pre>
+<p><strong>Question 7.</strong></p>
+<p>There are two blue balls and twelve yellow balls in an urn. You (randomly) choose a ball from the bag (without replacement). You will win 30 dollars if you pick blue ball or lose 10 dollars if you pick yellow ball. The game will stop when you choose a blue ball. What is the expected profit from the game?</p>
+<pre class="r"><code>profit &lt;-c(); nloop=10000
+for (iloop in 1:nloop){
+  money= 0;
+  balls = c(rep(&quot;B&quot;,2),rep(&quot;Y&quot;,12))
+  sam = sample(balls,1,replace=F)
+  repeat{ 
+    sam = sample(balls,1,replace=F)
+    len = length(balls)
+    if(sam ==&quot;B&quot;){
+      money =money+40
+      break
+    }
+    else {
+      money = money-10
+      balls=balls[-len]
+    }
+  }
+  profit &lt;- c(profit,money)
+}
+mean(profit)</code></pre>
+<pre><code>## [1] -0.123</code></pre>
+<pre><code>## [1] &quot;If you play, by average, you will win -0.12 dollars&quot;</code></pre>
+<p><strong>Question 8.</strong></p>
+<p>A multiple choice exam is given. A problem has four possible answers, and exactly one answer is correct. The student is allowed to choose a subset of the four possible answers as his answer. If his chosen subset contains the correct answer, the student receives three points, but he loses one point for each wrong answer in his chosen subset.</p>
+<p>Find the expected score using simulation.</p>
+<pre class="r"><code>(E_X = Com(4,4)/Com(4,4)*(3-3) + Com(3,2)/Com(4,3)*(3-2) + Com(3,3)/Com(4,3)*(0-3) + Com(3,1)/Com(4,2)*(3-1) + Com(3,2)/Com(4,2)*(0-2) + Com(3,0)/Com(4,1)*(3-0) + Com(3,1)/Com(4,1)*(0-1))</code></pre>
+<pre><code>## [1] 0</code></pre>
+<pre><code>## [1] &quot;The expected score is 0&quot;</code></pre>
+<pre class="r"><code>nloop=100000
+answer = c(&quot;C&quot;,rep(&quot;W&quot;,3))
+totalpoint &lt;-c()
+for (iloop in 1:nloop){
+  sub1= sample(1:4,1)
+  subset = sample(answer,sub1,replace=F)
+  len = length(subset)
+  point= 0;
+  if (&quot;C&quot; %in% subset){
+    point = point+3-len+1
+  } 
+  else {
+    point = point - length(subset)
+  }
+  totalpoint &lt;- c(totalpoint,point)
+}
+mean(totalpoint)</code></pre>
+<pre><code>## [1] -0.00514</code></pre>
+<p><strong>Question 9.</strong></p>
+<p>It has been said that a Dr. B. Muriel Bristol declined a cup of tea stating that she preferred a cup into which milk had been poured first. The famous statistician R. A. Fisher carried out a test to see if she could tell whether milk was put in before or after the tea. Assume that for the test Dr. Bristol was given eight cups of tea—four in which the milk was put in before the tea and four in which the milk was put in after the tea.</p>
+<p>For more info: <a href="https://www.irishtimes.com/news/science/how-a-tea-tasting-test-led-to-a-breakthrough-in-statistics-1.3998786" class="uri">https://www.irishtimes.com/news/science/how-a-tea-tasting-test-led-to-a-breakthrough-in-statistics-1.3998786</a></p>
+<p><strong>(a)</strong> What is the expected number of correct guesses the lady would make if she had no information after each test and was just guessing?</p>
+<pre class="r"><code>nloop= 100000
+tea_arr =c()
+tea = c(c(rep(&quot;T&quot;,4)),c(rep(&quot;M&quot;,4)))
+for (iloop in 1:nloop){
+  count=0
+  mix   = sample(tea,8, replace=F)
+  guess = sample(tea,8, replace=F)
+  for (i in 1:8){
+    if(mix[i]==guess[i]){
+      count =  count+1
+    }
+  }
+  tea_arr = c(tea_arr,count)
+}
+
+mean(tea_arr)</code></pre>
+<pre><code>## [1] 4.0004</code></pre>
+<p><strong>(b)</strong> Find the expected number of correct guesses if she was told the result of each guess and used an optimal guessing strategy.</p>
+<pre class="r"><code># By using this formula:
+# E(x) = S + Summation (x_to_C)(1/2)*Com(S,x)*Com(C,x)/Com(S+C,2x) where x=1, S=4 and C=4 here.
+(E_X = 4+ 1/2*( (Com(4,1)*Com(4,1)/Com(8,2))+(Com(4,2)*Com(4,2)/Com(8,4))+(Com(4,3)*Com(4,3)/Com(8,6))+(Com(4,4)*Com(4,4)/Com(8,8)) ))</code></pre>
+<pre><code>## [1] 5.328571</code></pre>
+<pre><code>## [1] &quot;The expected score is 5 2&quot;</code></pre>
+<pre class="r"><code>nloop= 10000
+tea_arr =c()
+for (iloop in 1:nloop){
+  count=0
+  tea = c(c(rep(&quot;T&quot;,4)),c(rep(&quot;M&quot;,4)))
+   for (i in 1:8){
+     guess = sample(tea,1, replace=F)
+     mix   = sample(tea,1, replace=F)
+     if(mix==guess){
+       count=count+1
+     }
+     tea=tea[-((which(tea==mix))[1])]
+   }
+  tea_arr = c(tea_arr,count)
+}
+
+mean(tea_arr)</code></pre>
+<pre><code>## [1] 4.9817</code></pre>
+</div>
+
+
+
+
+</div>
+
+<script>
+
+// add bootstrap table styles to pandoc tables
+function bootstrapStylePandocTables() {
+  $('tr.odd').parent('tbody').parent('table').addClass('table table-condensed');
+}
+$(document).ready(function () {
+  bootstrapStylePandocTables();
+});
+
+
+</script>
+
+<!-- tabsets -->
+
+<script>
+$(document).ready(function () {
+  window.buildTabsets("TOC");
+});
+
+$(document).ready(function () {
+  $('.tabset-dropdown > .nav-tabs > li').click(function () {
+    $(this).parent().toggleClass('nav-tabs-open')
+  });
+});
+</script>
+
+<!-- code folding -->
+
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>

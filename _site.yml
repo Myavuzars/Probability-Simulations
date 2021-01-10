@@ -3,7 +3,7 @@ output_dir: "docs"
 navbar:
   title: "R"
   left:
-  - text: "Welcome"
+  - text: "Introduction"
     href: Welcome.html
   - text: "Probability Simulation with R"
     href: Rsimulation1.html

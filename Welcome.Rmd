@@ -1,5 +1,5 @@
 ---
-title: "Welcome"
+title: "Introduction"
 knit: (function(input_file, encoding) {
   out_dir <- 'docs';
   rmarkdown::render(input_file,
@@ -14,22 +14,77 @@ output: html_document
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
-## Welcome
+<h3>Random Variables</h3>
 
-Please work
+A random variable is a way to map outcomes of random process to the real numbers.For example, flipping a coin or rolling a dice are examples of random variables.So, simply, any outcome we get through random process is random variable.
 
-When you click the **Knit** button a document will be generated that includes both content as well as the output of any embedded R code chunks within the document. You can embed an R code chunk like this:
+A **discrete** random variable takes on a finite or countably infinite number values whereas a **continuous** random variable takes values in an interval on the real line.In this case, the random variable uncountable. In this work, we are only beusing discrete random variables.
 
-```{r cars}
-summary(cars)
-```
+  <br/><br/>
+  <br/><br/>
 
-## Including Plots
+**Expected Value for Discrete Random Variables**
 
-You can also embed plots, for example:
+If the discrete random variable X can take values x1,x2,x3,..., then the expected value is defined as
 
-```{r pressure, echo=FALSE}
-plot(pressure)
-```
+E(x) = $$\sum_{i=1} x_{i} * P(X=x_{i})$$   where xi is the outcome and P(X=xi) is the probability.
 
-Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
+  <br/><br/>
+  <br/><br/>
+
+
+**Bernoulli and Binomial Random Variables**
+
+A Bernoulli random variable is a simplest kind of random variable. It can only take two values, 1 or 0. These are mostly denoted as "success" or "failure":        <br/><br/>
+                                S= {success, failure}
+                                   <br/><br/>
+                    Probability mass function: P(X=1)=p
+                                  <br/><br/>
+                                               P(X=0)=(1-p)
+                                  <br/><br/>
+                               Expected Value: E[X]=p
+                    
+A binomial random variable are generalizations of the Bernoulli random variable. Binomial r.v. has a fixed number of trials.
+                                <br/><br/>
+                               P(X=k)= $\binom{n}{k}$ $p^{k}$  $(1-p)^{n-k}$
+                                <br/><br/>
+                               Expected Value: E[X]=np
+                             <br/><br/>
+                               <br/><br/>
+
+
+
+**Geometric Random Variables**   
+
+The geometric random variable also uses Bernoulli trials, but it doesn't have a fixed number of trials.Geometric random variable Y is defined as the number of failures before the first success occurs.
+                                    <br/><br/>
+                                if Y ~ Geom(p) ==>
+                                 <br/><br/>
+                                P(Y=k)=$(1-p)^{k} p$  ofr k=1,2,3...
+                                 <br/><br/>
+                                Expected Value:(1-p)/p
+                                       <br/><br/>
+                                       <br/><br/>
+
+**Poisson Random Variables**  
+
+The Poisson distribution is very popular to model the number of times an event occurs in an interval time or space, such as the number of traffic death in 2010 or the number of volcanic eruptions in USA.
+                                        <br/><br/>
+                                For $\lambda>0$ and Y ~ Pois($\lambda$)
+                                        <br/><br/>
+                                P(Y=k)= $e^{-lambda}$ $lambda^{k}$/ k!  for k=0,1,2,...
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
